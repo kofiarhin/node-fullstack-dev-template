@@ -1,5 +1,8 @@
-fetch("/products")
+fetch("/users")
   .then((response) => response.json())
-  .then((data) => {
-    console.log(data);
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((e) => {
+    console.log(e);
   });
