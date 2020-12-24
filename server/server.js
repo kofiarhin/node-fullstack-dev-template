@@ -27,6 +27,12 @@ hbs.registerPartials(partialsPath)
 app.use(connectLive());
 // routes
 
+
+// default data
+const createdBy = {
+  name: "kofi arhin",
+  email: "kofiarhin@gmail.com"
+}
 app.get("/", (req, res) => {
   res.render("index");
 });
@@ -42,6 +48,16 @@ app.post("/users", (req, res) => {
 app.get("/products", (req, res) => {
   res.send([{ name: "iphne 12" }, { name: "books" }]);
 });
+
+app.get("/login", (req,res) => {
+  res.render("login", {name: "kofi arhin"})
+})
+
+
+app.get("/register", (req, res) => {
+
+  res.render("register", { name: "kofi arhin"})
+})
 
 const port = process.env.PORT || 3000;
 

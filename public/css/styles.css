@@ -1,5 +1,85 @@
+/* default styling */
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   font-family: "Open Sans", sans-serif;
-  background: pink;
+}
+
+h1, h2, h3, h4, h5, p {
+  margin: 0;
+  padding: 0;
+}
+
+ a {
+   text-decoration: none;
+   color: black;
+ }
+
+ button {
+   outline: none;
+   border: none;
+ }
+
+/* default layout */
+.container {
+  width: 1200px;
+  max-width: 90%;
+  margin: 0 auto
+}
+
+/* general styling */
+.title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* main header */
+.main-header {
+  padding: 2rem 0rem;
+}
+.main-header .container {
+  display:  flex;
+  align-items: center;
+  justify-content:space-between;
+}
+
+.main-header .container nav a {
+  margin-left: 1rem;
+}
+
+/* main form */
+.main-form {
+  width: 540px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+.main-form  input  {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.8rem 0rem;
+  text-indent: 20px;
+  font-size: 1.2rem
+
+}
+
+.main-form button {
+  display: block;
+  padding: 0.8rem;
+  width: 100%;
+  cursor: pointer;
+  background: black;
+  color: white;
+}
+
+
+/* footer */
+
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0
 }
