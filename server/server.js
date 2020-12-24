@@ -5,6 +5,8 @@ const liveReload = require("livereload");
 const connectLive = require("connect-livereload");
 const publicPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../views");
+const partialsPath = path.join(__dirname, "../views/partials")
+const hbs = require("hbs")
 
 const liveReloadServer = liveReload.createServer();
 liveReloadServer.watch(publicPath, viewsPath);
@@ -12,13 +14,14 @@ liveReloadServer.watch(publicPath, viewsPath);
 liveReloadServer.server.once("connection", () => {
   setTimeout(() => {
     liveReloadServer.refresh("/");
-  }, 100);
+  }, 50);
 });
 
 // setup view
 app.use(express.static(publicPath));
 app.use(express.json());
 app.set("view engine", "hbs");
+hbs.registerPartials(partialsPath)
 app.use(connectLive());
 
 // routes
