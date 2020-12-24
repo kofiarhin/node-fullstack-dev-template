@@ -8,7 +8,7 @@ const viewsPath = path.join(__dirname, "../views");
 const partialsPath = path.join(__dirname, "../views/partials")
 const hbs = require("hbs")
 const cookieParser = require("cookie-parser")
-
+require("./db/mongoose")
 const liveReloadServer = liveReload.createServer();
 liveReloadServer.watch(publicPath, viewsPath);
 
