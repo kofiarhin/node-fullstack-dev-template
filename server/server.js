@@ -7,6 +7,7 @@ const publicPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../views");
 const partialsPath = path.join(__dirname, "../views/partials")
 const hbs = require("hbs")
+const cookieParser = require("cookie-parser")
 
 const liveReloadServer = liveReload.createServer();
 liveReloadServer.watch(publicPath, viewsPath);
@@ -17,13 +18,13 @@ liveReloadServer.server.once("connection", () => {
   }, 50);
 });
 
-// setup view
+// setup middlewares
 app.use(express.static(publicPath));
 app.use(express.json());
+app.use(cookieParser())
 app.set("view engine", "hbs");
 hbs.registerPartials(partialsPath)
 app.use(connectLive());
-
 // routes
 
 app.get("/", (req, res) => {
