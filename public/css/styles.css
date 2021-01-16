@@ -36,6 +36,9 @@ h1, h2, h3, h4, h5, p {
   margin-bottom: 1rem;
 }
 
+.slug {
+  text-align: center;
+}
 /* main header */
 .main-header {
   padding: 2rem 0rem;
