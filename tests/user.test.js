@@ -18,6 +18,5 @@ beforeEach( async() => {
 test("pass", () => console.log("pass"))
 
 afterAll(async() => {
-
     await mongoose.connection.close()
 })
