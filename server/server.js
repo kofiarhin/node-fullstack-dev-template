@@ -2,6 +2,7 @@ const app = require("./app")
 const path = require("path");
 const publicPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../views");
+const userRouter = require("./router/userRouter")
 
 
 
@@ -40,14 +41,6 @@ liveReloadServer.server.once("connection", () => {
 
 app.use(connectLive());
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
-// login route
-app.get("/login", (req, res) => {
-  res.render("login")
-})
 
 const port = process.env.PORT || 3000;
 
