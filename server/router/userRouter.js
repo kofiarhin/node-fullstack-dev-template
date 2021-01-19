@@ -21,6 +21,8 @@ router.get("/", (req, res) => {
 
 router.post("/", async(req, res) => {
 
+
+    console.log(req.body)
     res.status(201).send(req.body)
 })
 

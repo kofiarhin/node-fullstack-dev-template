@@ -46,7 +46,7 @@ function registerController(form) {
       }
     }).then (response => {
 
-      console.log(response)
+    console.log(" user created")
     }).catch( error => {
 
       console.log(error)
