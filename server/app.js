@@ -70,7 +70,7 @@ app.get("/", (req, res) => {
 })
 
 
-
+// create user
 app.post("/users", async(req, res) => {
 
   const user = new User(req.body);
@@ -86,7 +86,7 @@ app.post("/users", async(req, res) => {
   }
 })
 
-
+// login user
 app.post("/login", async(req, res) => {
 
   
@@ -97,11 +97,21 @@ app.post("/login", async(req, res) => {
   if(user) {
 
     // generate token
+    const token = await user.generateToken();
 
-    const token = user.generateToken()
+    if(process.env.environment === "test") {
+      res.header("token", token)
+    } else {
+      res.cookie("jwt", token)
+    }
+
+    res.send(200)
+
+  } else {
+    
+    res.status(404).send()
   }
 
-  res.send(200)
 })
 
 module.exports = app;

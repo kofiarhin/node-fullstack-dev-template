@@ -78,6 +78,21 @@ test("login user", async() => {
     const response = await request(app).post("/login").send({
         email: userOne.email,
         password: userOne.password
-    }).expect(200)
+    }).expect(200);
+    expect(response.header).toHaveProperty("token")
 })
 
+
+// cannot login invalid user
+test("cannot login invalid user", async() => {
+
+    const responsee = await request(app).post("/login").send({
+        email: userOne.email,
+        password: "x"
+    }).expect(404)
+})
+
+
+// logout user
+// delete user
+// update user 
