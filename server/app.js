@@ -16,9 +16,12 @@ app.use(cookieParser())
 app.set("view engine", "hbs");
 hbs.registerPartials(partialsPath)
 
-const environment = "dev"
+// const environment = "dev"
+const environment = process.env.environment
 
-if(environment == "dev") {
+
+if(environment === "dev") {
+ console.log("live reload")
   // setup live reload
 const liveReload = require("livereload");
 const liveReloadServer = liveReload.createServer();
