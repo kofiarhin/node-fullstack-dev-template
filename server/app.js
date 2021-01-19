@@ -5,6 +5,7 @@ const publicPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../views");
 const partialsPath = path.join(__dirname, "../views/partials")
 const hbs = require("hbs")
+const User = require("./model/user")
 const cookieParser = require("cookie-parser")
 require("./db/mongoose")
 
@@ -22,7 +23,6 @@ const environment = process.env.environment
 
 if(environment === "dev") {
  console.log("live reload")
-  // setup live reload
 const liveReload = require("livereload");
 const liveReloadServer = liveReload.createServer();
 const connectLive = require("connect-livereload");            
@@ -42,10 +42,66 @@ app.use(connectLive());
   console.log("test environment")
 }
 
+function handleErrors(e) {
+
+  let errors = {}
+
+  if(e.code === 11000) {
+
+    return errors =  {
+      email: "Email already taken"
+    }
+  }
+
+  if(e.message.includes("User validation failed")) {
+
+       Object.values(e.errors).forEach ( error => {
+
+        errors[error.path] = error.message;
+       });
+
+        return errors;
+  }
+}
+
 
 app.get("/", (req, res) => {
   res.render("index")
 })
 
+
+
+app.post("/users", async(req, res) => {
+
+  const user = new User(req.body);
+
+  try {
+    await user.save();
+    res.status(201).send()
+  }catch(e) {
+
+
+     const errors = handleErrors(e)
+    res.status(400).send({ error: errors})
+  }
+})
+
+
+app.post("/login", async(req, res) => {
+
+  
+  const { email, password } = req.body;
+
+  const user = await User.login(email, password);
+  
+  if(user) {
+
+    // generate token
+
+    const token = user.generateToken()
+  }
+
+  res.send(200)
+})
 
 module.exports = app;
