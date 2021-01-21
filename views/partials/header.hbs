@@ -28,9 +28,17 @@
             </a>
 
             <nav>
+
                 <a href="/">Home</a>
+
+                {{#if isLoggedIn}}
+
+                <a href="/proofil">Profile</a>
+                {{else}}
                 <a href="/login">Login</a>
                 <a href="/register">Register</a>
+                {{/if}}
+
             </nav>
         </div>
     </header>

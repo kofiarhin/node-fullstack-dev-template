@@ -65,6 +65,8 @@ function handleErrors(e) {
 }
 
 
+
+// index
 app.get("/", (req, res) => {
   res.render("index")
 })
