@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 // connect to database
-mongoose.connect("mongodb://localhost:27017/auth", {
+mongoose.connect(process.env.mongo_url, {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
     useCreateIndex: true

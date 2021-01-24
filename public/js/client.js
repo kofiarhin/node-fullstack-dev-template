@@ -1,56 +1,101 @@
-function router() {
+const path = location.pathname;
 
-      const path = window.location.pathname;
-      
-      if(path == "/login" || path =="/register") {
 
-            const form = document.querySelector(".main-form")
-           
-            form.addEventListener("submit", (e) => {
-              e.preventDefault();
+switch(path) {
 
-              if(path === "/login") {
-                loginController(form)
-              } else if(path === "/register") {
+  case "/register":
+      RegisterController()
+    break;
+}
 
-                registerController(form)
-              }
+function RegisterController() {
+
+  const form  = document.querySelector("form");
+
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+     const firstname = form.firstname.value;
+     const lastname = form.lastname.value;
+     const password = form.password.value;
+     const email = form.email.value;
+
+     const userData = {
+       firstname,
+       lastname,
+       email,
+       password
+     }
+
+     clearErrors()
+
+     fetch( "/users", {
+       method: "POST",
+       body: JSON.stringify(userData),
+       headers: {
+         "Content-type": "application/json"
+       }
+     }).then ( response => response.json()).then(  result => {
+
+      if(result.error) {
+
+            Object.keys(result.error).forEach ( error => {
+
+              const field = document.querySelector(".error-"+error);
+
+              field.innerText = result.error[error]
             })
+      } else {
+
+        location.assign("/")
       }
+
+      
+     })
+
+    //  fetch("/users", {
+    //    method:"POST",
+    //    body: JSON.stringify(userData),
+    //    headers: {
+    //      "Content-type": "application/json"
+    //    }
+    //  }).then ( response => {
+    //    console.log(response.status)
+    //    return response.json()
+    //  } ).then( result => {
+
+
+    //   if(result && result.error) {
+
+    //         Object.keys(result.error).forEach( field => {
+
+    //               const domField = document.querySelector(".error-"+field);
+
+    //               domField.innerText = result.error[field];
+    //         })
+    //   } else {
+
+    //     console.log("user created")
+    //   }
+
+    //  }).catch( error => {
+
+    //   console.log(error.message)
+    //  })
+
+
+
+
+
+  })
 }
 
 
-function loginController(form) {
+function clearErrors() {
 
-    const email = form.email;
-    console.log(email)
+  const errors = document.querySelectorAll(".error");
+
+  errors.forEach( error => {
+    error.innerText = "";
+  })
 }
-
-function registerController(form) {
-  
-    const name = form.name.value;
-    const email = form.email.value;
-    const password = form.password.value;
-
-    const data = {
-      name: "lebron james",
-      email: "lebron@gmail.com",
-      password: "password123"
-    }
-    // make post request
-    fetch("/users", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-type": "application/json"
-      }
-    }).then (response => {
-
-    console.log(" user created")
-    }).catch( error => {
-
-      console.log(error)
-    })
-
-}
-router()

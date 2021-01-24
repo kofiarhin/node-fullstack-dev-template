@@ -17,17 +17,14 @@ app.use(cookieParser())
 app.set("view engine", "hbs");
 hbs.registerPartials(partialsPath)
 
-// const environment = "dev"
+// setup live  reload
 const environment = process.env.environment
-
-
 if(environment === "dev") {
- console.log("live reload")
+
 const liveReload = require("livereload");
 const liveReloadServer = liveReload.createServer();
 const connectLive = require("connect-livereload");            
 liveReloadServer.watch(publicPath, viewsPath);
-
 
 
 liveReloadServer.server.once("connection", () => {
@@ -35,85 +32,64 @@ liveReloadServer.server.once("connection", () => {
     liveReloadServer.refresh("/");
   }, 3);
 });
+
 app.use(connectLive());
 
-} else {
+} 
 
-  console.log("test environment")
-}
-
-function handleErrors(e) {
-
-  let errors = {}
-
-  if(e.code === 11000) {
-
-    return errors =  {
-      email: "Email already taken"
-    }
-  }
-
-  if(e.message.includes("User validation failed")) {
-
-       Object.values(e.errors).forEach ( error => {
-
-        errors[error.path] = error.message;
-       });
-
-        return errors;
-  }
-}
-
-
-
-// index
-app.get("/", (req, res) => {
+app.get("/",(req, res) => {
   res.render("index")
 })
 
+app.get("/login", (req, res) => {
+  res.render("login")
+})
 
-// create user
-app.post("/users", async(req, res) => {
+app.get("/register", (req, res) => {
+  res.render("register")
+})
+
+
+
+// register user
+app.post('/users', async(req, res) => {
 
   const user = new User(req.body);
 
   try {
-    await user.save();
-    res.status(201).send()
-  }catch(e) {
+    await user.save()
+    res.status(201).send({ user: user._id})
 
+  }catch(err) {
 
-     const errors = handleErrors(e)
-    res.status(400).send({ error: errors})
+     const errors = handleErrors(err);
+
+      res.status(400).send({
+        error: errors
+      })
   }
 })
 
-// login user
-app.post("/login", async(req, res) => {
 
-  
-  const { email, password } = req.body;
+function handleErrors(error) {
 
-  const user = await User.login(email, password);
-  
-  if(user) {
+  let errors = {}
 
-    // generate token
-    const token = await user.generateToken();
+  if(error.code === 11000) {
+    return errors = {email: "email already taken!"}
+  }
+  if(error.message.includes("User validation failed")) {
 
-    if(process.env.environment === "test") {
-      res.header("token", token)
-    } else {
-      res.cookie("jwt", token)
-    }
+     Object.values(error.errors).forEach( item => {
 
-    res.send(200)
+        const { path, message} = item.properties;
 
-  } else {
-    
-    res.status(404).send()
+         errors[path] = message;
+     })
   }
 
-})
+  return errors;
+
+}
 
 module.exports = app;
