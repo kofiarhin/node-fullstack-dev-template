@@ -8,6 +8,7 @@ const hbs = require("hbs")
 const User = require("./model/user")
 const cookieParser = require("cookie-parser")
 require("./db/mongoose")
+const auth = require('./middleware/auth')
 
 
 // // setup middlewares
@@ -37,12 +38,31 @@ app.use(connectLive());
 
 } 
 
-app.get("/",(req, res) => {
-  res.render("index")
+app.get("/", (req, res) => {
+  res.render("/")
 })
 
-app.get("/login", (req, res) => {
+app.get("/login",  (req, res) => {
+
+  
   res.render("login")
+})
+
+
+// login user
+app.post("/login", async(req, res) => {
+ 
+  const user = await User.login(req.body.email, req.body.password);
+
+  if(user) {
+    
+    const token =  await user.generateToken();
+    res.setHeader("Set-Cookie", "token="+token)
+    return res.send({ _id: user._id, token})
+  }
+
+  res.status(404).send({ error: "invalid credentials"})
+  
 })
 
 app.get("/register", (req, res) => {
@@ -58,7 +78,11 @@ app.post('/users', async(req, res) => {
 
   try {
     await user.save()
-    res.status(201).send({ user: user._id})
+    
+    const token = await user.generateToken();
+
+    res.setHeader("Set-Cookie", "token="+token)
+    res.status(201).send({ user: user._id, token})
 
   }catch(err) {
 
@@ -68,6 +92,12 @@ app.post('/users', async(req, res) => {
         error: errors
       })
   }
+})
+
+
+app.get('/profile/me', auth, async(req, res) => {
+
+  res.send({ user: req.user})
 })
 
 
@@ -91,5 +121,34 @@ function handleErrors(error) {
   return errors;
 
 }
+
+
+app.post("/logout", auth,  async(req, res) => {
+  
+  req.user.tokens  = req.user.tokens.filter( token => token.token !== req.token );
+
+  req.token = ""
+  await req.user.save();
+  res.send()
+})
+
+
+// update user
+app.patch("/users", auth,  async(req, res) => {
+
+     const fields = Object.keys(req.body);
+     
+    fields.forEach (field  => {
+
+      req.user[field]  = req.body[field];
+    })
+
+    await req.user.save()
+    res.send(req.user)
+})
+
+
+
+// delete user from database
 
 module.exports = app;

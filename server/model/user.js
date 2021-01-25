@@ -26,7 +26,10 @@ const userSchema = new mongoose.Schema({
                 type: String
             }
         }
-    ]
+    ],
+    avatar: {
+        type: Buffer
+    }
 },{
     timestamps: true
 });
@@ -42,15 +45,18 @@ userSchema.pre("save", async function(next) {
 })
 
 userSchema.statics.login = async function(email, password) {
+        
+    const  user = await User.findOne({ email}); 
 
-    // fetch user from database
-    const user = await User.findOne({  email})
+    if(user) {
 
-    if(!user) throw new Error("invalid login details")
-    
-    // compare password
-    const isMatch = await bcrypt.compare(password, user.password)
-    if(isMatch) return user;
+        // compare passwords
+        const isMatch = await bcrypt.compare(password, user.password); 
+
+        if(isMatch) {
+            return user;
+        }
+    }
 }
 
 
