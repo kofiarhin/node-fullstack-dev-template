@@ -110,3 +110,17 @@ expect(user.lastname).toEqual("new lastname")
 
 })
 
+
+// delete user from database
+test("delete user from database", async() => {
+
+            await request(app).delete("/users")
+            .set("token", userOneToken)
+            .send().expect(200)
+
+
+            const user = await User.findOne({ email: userOne.email});
+
+           expect(user).toBe(null)
+})
+

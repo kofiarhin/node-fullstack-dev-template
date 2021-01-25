@@ -150,5 +150,11 @@ app.patch("/users", auth,  async(req, res) => {
 
 
 // delete user from database
+app.delete("/users", auth,  async(req, res) => {
 
+
+  // remove user from database
+  await req.user.remove()
+  res.send()
+})
 module.exports = app;
