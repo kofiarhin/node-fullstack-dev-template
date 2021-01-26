@@ -39,12 +39,10 @@ app.use(connectLive());
 } 
 
 app.get("/", (req, res) => {
-  res.render("/")
+  res.render("index")
 })
 
 app.get("/login",  (req, res) => {
-
-  
   res.render("login")
 })
 
@@ -55,7 +53,7 @@ app.post("/login", async(req, res) => {
   const user = await User.login(req.body.email, req.body.password);
 
   if(user) {
-    
+  
     const token =  await user.generateToken();
     res.setHeader("Set-Cookie", "token="+token)
     return res.send({ _id: user._id, token})

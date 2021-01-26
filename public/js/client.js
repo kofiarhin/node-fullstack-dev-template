@@ -6,8 +6,40 @@ switch(path) {
   case "/register":
       RegisterController()
     break;
+    case "/login":
+      LoginController()
+      break;
+      
 }
 
+
+// login controller
+function LoginController() {
+
+     const form = document.querySelector("form")
+
+      form.addEventListener("submit", async function(e){
+        e.preventDefault();
+
+        const email = form.email.value;
+        const password = form.password.value;
+
+        fetch("/login", {
+          method: "POST",
+          body: JSON.stringify({ email ,password}),
+          headers: {
+            "Content-type": "application/json"
+          }
+        }).then( response => {
+
+          console.log(response.status, { email, password})
+        })
+        
+      })
+
+}
+
+// register controller
 function RegisterController() {
 
   const form  = document.querySelector("form");
@@ -47,7 +79,7 @@ function RegisterController() {
             })
       } else {
 
-        location.assign("/")
+        location.assign("/login")
       }
 
       

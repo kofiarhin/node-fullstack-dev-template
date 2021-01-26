@@ -46,7 +46,7 @@ userSchema.pre("save", async function(next) {
 
 userSchema.statics.login = async function(email, password) {
         
-    const  user = await User.findOne({ email}); 
+    const  user = await User.findOne({ email});
 
     if(user) {
 
