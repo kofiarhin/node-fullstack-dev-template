@@ -9,6 +9,8 @@ const User = require("./model/user")
 const cookieParser = require("cookie-parser")
 require("./db/mongoose")
 const auth = require('./middleware/auth')
+const { handleErrors } = require("./lib/helper")
+const userRouter = require("./router/userRouter")
 
 
 // // setup middlewares
@@ -17,6 +19,8 @@ app.use(express.json());
 app.use(cookieParser())
 app.set("view engine", "hbs");
 hbs.registerPartials(partialsPath)
+app.use("/users", userRouter)
+
 
 // setup live  reload
 const environment = process.env.environment
@@ -38,121 +42,22 @@ app.use(connectLive());
 
 } 
 
-app.get("/", (req, res) => {
+// routes
+app.get("/", async(req, res) => {
   res.render("index")
 })
 
-app.get("/login",  (req, res) => {
+
+// login
+app.get("/login", (req, res) => {
   res.render("login")
 })
 
-
-// login user
-app.post("/login", async(req, res) => {
- 
-  const user = await User.login(req.body.email, req.body.password);
-
-  if(user) {
-  
-    const token =  await user.generateToken();
-    res.setHeader("Set-Cookie", "token="+token)
-    return res.send({ _id: user._id, token})
-  }
-
-  res.status(404).send({ error: "invalid credentials"})
-  
-})
-
-app.get("/register", (req, res) => {
+// register
+app.get("/register", (req, res ) => {
   res.render("register")
 })
 
 
 
-// register user
-app.post('/users', async(req, res) => {
-
-  const user = new User(req.body);
-
-  try {
-    await user.save()
-    
-    const token = await user.generateToken();
-
-    res.setHeader("Set-Cookie", "token="+token)
-    res.status(201).send({ user: user._id, token})
-
-  }catch(err) {
-
-     const errors = handleErrors(err);
-
-      res.status(400).send({
-        error: errors
-      })
-  }
-})
-
-
-app.get('/profile/me', auth, async(req, res) => {
-
-  res.send({ user: req.user})
-})
-
-
-function handleErrors(error) {
-
-  let errors = {}
-
-  if(error.code === 11000) {
-    return errors = {email: "email already taken!"}
-  }
-  if(error.message.includes("User validation failed")) {
-
-     Object.values(error.errors).forEach( item => {
-
-        const { path, message} = item.properties;
-
-         errors[path] = message;
-     })
-  }
-
-  return errors;
-
-}
-
-
-app.post("/logout", auth,  async(req, res) => {
-  
-  req.user.tokens  = req.user.tokens.filter( token => token.token !== req.token );
-
-  req.token = ""
-  await req.user.save();
-  res.send()
-})
-
-
-// update user
-app.patch("/users", auth,  async(req, res) => {
-
-     const fields = Object.keys(req.body);
-     
-    fields.forEach (field  => {
-
-      req.user[field]  = req.body[field];
-    })
-
-    await req.user.save()
-    res.send(req.user)
-})
-
-
-
-// delete user from database
-app.delete("/users", auth,  async(req, res) => {
-
-
-  // remove user from database
-  await req.user.remove()
-  res.send()
-})
 module.exports = app;

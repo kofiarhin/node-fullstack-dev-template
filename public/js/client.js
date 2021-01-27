@@ -21,18 +21,24 @@ function LoginController() {
       form.addEventListener("submit", async function(e){
         e.preventDefault();
 
-        const email = form.email.value;
-        const password = form.password.value;
+        // const email = form.email.value;
+        // const password = form.password.value;
+        const data = {
+             email: 'kofiarhin@gmail.com',
+             password: 'password123'
+}
 
-        fetch("/login", {
+
+        fetch("/users/login", {
           method: "POST",
-          body: JSON.stringify({ email ,password}),
+          body: JSON.stringify({ email: data.email ,password: data.password}),
           headers: {
             "Content-type": "application/json"
           }
         }).then( response => {
 
-          console.log(response.status, { email, password})
+          console.log(response.status)
+
         })
         
       })
@@ -47,16 +53,16 @@ function RegisterController() {
   form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
-     const firstname = form.firstname.value;
-     const lastname = form.lastname.value;
-     const password = form.password.value;
-     const email = form.email.value;
+    //  const firstname = form.firstname.value;
+    //  const lastname = form.lastname.value;
+    //  const password = form.password.value;
+    //  const email = form.email.value;
 
      const userData = {
-       firstname,
-       lastname,
-       email,
-       password
+       firstname: "kofi",
+       lastname: "arhin",
+       email: "kofiarhin@gmail.com",
+       password: 'password123'
      }
 
      clearErrors()
@@ -84,39 +90,6 @@ function RegisterController() {
 
       
      })
-
-    //  fetch("/users", {
-    //    method:"POST",
-    //    body: JSON.stringify(userData),
-    //    headers: {
-    //      "Content-type": "application/json"
-    //    }
-    //  }).then ( response => {
-    //    console.log(response.status)
-    //    return response.json()
-    //  } ).then( result => {
-
-
-    //   if(result && result.error) {
-
-    //         Object.keys(result.error).forEach( field => {
-
-    //               const domField = document.querySelector(".error-"+field);
-
-    //               domField.innerText = result.error[field];
-    //         })
-    //   } else {
-
-    //     console.log("user created")
-    //   }
-
-    //  }).catch( error => {
-
-    //   console.log(error.message)
-    //  })
-
-
-
 
 
   })
