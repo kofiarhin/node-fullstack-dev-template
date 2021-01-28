@@ -59,5 +59,10 @@ app.get("/register", (req, res ) => {
 })
 
 
+// home stuff
+app.get("/home", auth,  (req, res) => {
+  res.render("home")
+})
+
 
 module.exports = app;

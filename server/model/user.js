@@ -13,12 +13,15 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, "email is required"]
+        required: [true, "email is required"],
+        unique: [true, "email is already taken"],
+        trim: true,
     },
 
     password: {
         type: String,
-        required: [true, "password is required"]
+        required: [true, "password is required"],
+        trim: true
     },
     tokens: [
         {
@@ -38,9 +41,13 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function(next) {
 
      const user = this;
-    const salt = await bcrypt.genSalt(10);
+
+     if(user.isModified("password")) {
+const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(user.password, salt);
     user.password = hash;
+     }
+    
     next()
 })
 
@@ -49,7 +56,8 @@ userSchema.pre("save", async function(next) {
 // login user
 userSchema.statics.login = async function(email, password) {
     
-    const  user = await User.findOne({ email});
+    const  user = await User.findOne({ email})
+
 
     if(user) {
         // compare passwords
@@ -62,7 +70,7 @@ userSchema.statics.login = async function(email, password) {
     }
 }
 
-
+// generate token
 userSchema.methods.generateToken =  async function() {
 
         const user = this;

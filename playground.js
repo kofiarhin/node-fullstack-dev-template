@@ -75,4 +75,4 @@ async function login(email, password) {
 
 // createUser(userOne)
 
-// login(userOne.email, userOne.password)
+login(userOne.email, userOne.password)
