@@ -61,7 +61,10 @@ app.get("/register", (req, res ) => {
 
 // home stuff
 app.get("/home", auth,  (req, res) => {
-  res.render("home")
+
+  res.render("home", {
+    firstname: req.user.firstname
+  })
 })
 
 

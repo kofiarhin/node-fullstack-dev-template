@@ -3,6 +3,7 @@ const router = Router();
 const User = require("../model/user")
 const auth  = require("../middleware/auth")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 async function clearDatabase() {
 
@@ -21,7 +22,7 @@ router.get("/", async (req, res) => {
 // create users
 router.post('/', async(req, res) => {
 
-    await User.deleteMany()
+    await User.deleteMany()  // remove this code in production
     const user = new User(req.body);
 
     try {
@@ -40,35 +41,46 @@ router.post('/', async(req, res) => {
 
 // login user
 router.post("/login", async(req, res) => {
-    
-         const  user = await User.login(req.body.email, req.body.password);
-        
-         if(!user) return res.status(404).send();
 
-        //  generate tooken
-         const token = await user.generateToken();
-        //  set token
-         res.cookie("token", token)
+    const user = await User.login(req.body.email, req.body.password)
 
-        //  send response
-         res.send({ user: {
-             id: user._Id,
-             firstname: user.firstname,
-             lastname: user.lastname,
-             token
-         }})
+    if(user) {
+
+        const token = await user.generateToken();
+
+        res.cookie("token", token);
+        res.locals.user = user;
+        return res.send({
+            token,
+            user
+        })
+    }
+
+    res.status(404).send()
 })
 
 
-// get profile
-router.get("/profile", auth,  async(req, res) => {
+router.get("/logout", async (req, res) => {
 
-    const { firstname, lastname, email } = req.user;
-    res.send({
-        firstname,
-        lastname,
-        email
-    });
+    const token = req.cookies.token;
+    
+    const payload =  jwt.verify(token, process.env.jwt_secret);
+    
+    const {_id} = payload;
+    
+    const user = await User.findById(_id);
+
+    if(user) {
+
+        const { tokens }  = user;
+
+        user.tokens =  tokens.filter ( token  => token !== token);
+        await user.save();
+    }
+
+    res.redirect("/login")
+
+    res.send();
 })
 
 

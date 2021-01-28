@@ -23,12 +23,27 @@ test("login user",  async() => {
                     password: userOne.password
                 });
 
+
                 expect(response.body).toHaveProperty("user")
 
 })
 
 
-test("get user", async() => {
 
-    await request(app).get("/home").set("token", userOneToken).send()
+// get home page
+test("get home page", async() => {
+
+    await request(app).get("/home")
+    .set("token", userOneToken)
+    .send().expect(200)
 })
+
+
+//logout user
+test("logout user", async() => {
+
+    await request(app).get("/users/logout")
+    .set("token", userOneToken)
+    .send().expect(302) 
+})
+

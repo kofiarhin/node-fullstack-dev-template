@@ -43,9 +43,9 @@ userSchema.pre("save", async function(next) {
      const user = this;
 
      if(user.isModified("password")) {
-const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user.password, salt);
-    user.password = hash;
+     const salt = await bcrypt.genSalt(10);
+     const hash = await bcrypt.hash(user.password, salt);
+     user.password = hash;
      }
     
     next()
@@ -74,7 +74,7 @@ userSchema.statics.login = async function(email, password) {
 userSchema.methods.generateToken =  async function() {
 
         const user = this;
-        const token = jwt.sign({id: user._id}, process.env.jwt_secret)
+        const token = jwt.sign({_id: user._id}, process.env.jwt_secret)
         
         user.tokens = user.tokens.concat({token});
 
