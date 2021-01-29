@@ -28,7 +28,10 @@ const auth = async (req, res, next) =>  {
 
       const user = await User.findOne({_id, "tokens.token": token});
 
-      if(!user) res.status(401).send({ error: "invalid credentials"})
+      if(!user) {
+         res.locals.user = null ; 
+         return res.status(401).send({ error: "invalid credentials"})
+      }
 
       res.locals.user = user;
 

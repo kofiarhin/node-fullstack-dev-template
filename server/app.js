@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.set("view engine", "hbs");
 hbs.registerPartials(partialsPath)
-app.use("/users", userRouter)
+
 
 
 // setup live  reload
@@ -66,6 +66,12 @@ app.get("/home", auth,  (req, res) => {
     firstname: req.user.firstname
   })
 })
+
+app.get("/profile", auth,  ( req, res) => {
+  res.render("profile")
+})
+
+app.use("/users", userRouter)
 
 
 module.exports = app;

@@ -62,6 +62,13 @@ h1, h2, h3, h4, h5, p {
   margin-left: 1rem;
 }
 
+.main-header .menu {
+  font-size: 1.8rem;
+  opacity: 0.8;
+  cursor: pointer;
+  display: none;
+}
+
 /* main form */
 .main-form {
   width: 540px;
@@ -96,3 +103,14 @@ footer .container {
   padding: 2rem 0
 }
 
+
+
+/* media queries */
+@media(max-width: 650px) {
+  .main-header  nav {
+    display: none;
+  }
+  .main-header .menu {
+    display: block;
+  }
+}
