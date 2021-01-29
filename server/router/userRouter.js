@@ -86,6 +86,8 @@ router.post("/login", async(req, res) => {
 })
 
 
+
+// logout user
 router.get("/logout", auth,  async (req, res) => {
 
     const { tokens } = req.user;
@@ -103,5 +105,9 @@ router.get("/logout", auth,  async (req, res) => {
 
 
 
+// get user pfofile
+router.get("/me", auth,  async(req, res) => {
+    res.send({ user: req.user})
+})
 
 module.exports = router;

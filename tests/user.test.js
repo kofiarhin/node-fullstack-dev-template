@@ -68,11 +68,19 @@ test("logout user", async() => {
 
            const token = response.body.token;
 
-        
-
         // logout user
        const res =  await request(app).get("/users/logout").set("token", token).send().expect(302)
 
+})
+
+
+// get user profile
+test("get user profile", async() => {
+
+            const response  = await request(app).get("/users/me")
+            .set("token", userOneToken)
+            .send().expect(200)
+            expect(response.body).toHaveProperty("user")
 })
 
 
