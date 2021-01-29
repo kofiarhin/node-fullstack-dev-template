@@ -31,22 +31,29 @@ function LoginController() {
 
         // const email = form.email.value;
         // const password = form.password.value;
-        const data = {
-             email: 'kofiarhin@gmail.com',
-             password: "password"
-            }
-
+       
+        const email = document.querySelector(".email").value;
+        const password = document.querySelector(".password").value;
 
         fetch("/users/login", {
           method: "POST",
-          body: JSON.stringify({ email: data.email ,password: data.password}),
+          body: JSON.stringify({ email, password}),
           headers: {
             "Content-type": "application/json"
           }
-        }).then( response => {
+        }).then( async  response => {
 
           if(response.status === 200) {
             location.assign("/home")
+          }
+
+          if(response.status === 404) {
+
+              const result = await response.json();
+
+               const domError = document.querySelector(".error");
+               
+               domError.innerText = result.error;
           }
 
         })
@@ -60,23 +67,42 @@ function RegisterController() {
 
   const form = document.querySelector("form")
 
-  form.addEventListener("submit", async(e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
 
+    clearErrors()
 
-       fetch("/users", {
-         method: "POST",
-         body: JSON.stringify(userOne),
-         headers: {
-           "Content-type": "application/json"
-         }
-       }).then ( response => {
+    const firstname = document.querySelector(".firstname").value;
+    const lastname = document.querySelector(".lastname").value;
+    const email = document.querySelector(".email").value;
+    const password = document.querySelector(".password").value;
+     const request = await fetch("/users", {
+       method: "POST",
+       body: JSON.stringify({firstname, lastname, email, password}),
+       headers: {
+         "Content-type": "application/json"
+       }
+     });
 
-        console.log(response.status)
-        if(response.status === 201) {
-          location.assign("/login")
-        }
-       })
+    if(request.status === 400 ) {
+
+      const errors = await request.json();
+
+      const { error} = errors;
+      const fields = Object.keys(error);
+      
+      fields.forEach ( field => {
+
+            const domField  = document.querySelector(`.error-${field}`);
+
+            domField.innerText = error[field];
+      })
+    }
+
+    if( request.status === 201) {
+
+      location.assign("/login")
+    }
   })
 }
 

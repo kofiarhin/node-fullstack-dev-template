@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const app = require("../server/app")
 const User = require("../server/model/user")
-const { setupDatabase, userOne, userOneToken } = require("./fixtures/db")
+const { setupDatabase, userOne, userOneToken, userTwo, userTwoId } = require("./fixtures/db")
 const request = require("supertest")
 
 // setup teardown
@@ -15,7 +15,24 @@ afterAll( async() => {
 })
 
 
+// register user
+test("register user" , async() => {
 
+    await request(app).post("/users").send(userTwo).expect(201)
+})
+
+
+// cannot create user with invalid data
+test("cannot create user with invalid data", async() => {
+
+     const response =  await request(app).post("/users").send().expect(400);
+
+    expect(response.body).toHaveProperty("error")
+
+});
+
+
+// login user
 test("login user",  async() => {
 
                const response =  await request(app).post("/users/login").send({
@@ -39,6 +56,8 @@ test("get home page", async() => {
 })
 
 
+
+// logout user
 test("logout user", async() => {
 
             // login user first

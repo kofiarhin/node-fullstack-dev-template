@@ -39,5 +39,6 @@ module.exports = {
     userOne,
     userTwo,
     userOneToken,
+    userTwoId,
     setupDatabase
 }

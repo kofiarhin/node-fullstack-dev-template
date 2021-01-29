@@ -20,10 +20,10 @@ router.get("/", async (req, res) => {
 })
 
 
+
 // create users
 router.post('/', async(req, res) => {
 
-    await User.deleteMany()  // remove this code in production
     const user = new User(req.body);
 
     try {
@@ -33,11 +33,36 @@ router.post('/', async(req, res) => {
         const token = await user.generateToken();
         res.cookie("token", token)
         res.status(201).send({id: user._id, token})
-    }catch(error) {
-        res.status(400).send()
+    }catch(err) {
+
+        const errors = handleErrors(err);
+
+        res.status(400).send({ error: errors})
     }
 })
 
+// handle errors
+function handleErrors(errors) {
+    
+    let result = {}
+
+// check duplicate user
+    if(errors.code === 11000) {
+        return { email: 'email already taken'}
+    }
+
+    if(errors.message.includes("User validation failed")) {
+
+        Object.values(errors.errors).forEach ( error => {
+
+            const { path, message } = error.properties;
+           result[path]  = message;
+
+        })
+    }
+
+    return result;
+}
 
 
 // login user
@@ -57,7 +82,7 @@ router.post("/login", async(req, res) => {
         })
     }
 
-    res.status(404).send()
+    res.status(404).send({ error: "Invalid credentials"})
 })
 
 
@@ -73,26 +98,10 @@ router.get("/logout", auth,  async (req, res) => {
     res.redirect("/login")
     res.send()
 
-    // const token = req.cookies.token;
-    
-    // const payload =  jwt.verify(token, process.env.jwt_secret);
-    
-    // const {_id} = payload;
-    
-    // const user = await User.findById(_id);
-
-    // if(user) {
-
-    //     const { tokens }  = user;
-
-    //     user.tokens =  tokens.filter ( token  => token !== token);
-    //     await user.save();
-    // }
-
-    // res.redirect("/login")
-
-    // res.send();
+   
 })
+
+
 
 
 module.exports = router;
