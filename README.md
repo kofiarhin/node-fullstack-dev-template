@@ -1,3 +1,5 @@
+# [Live Demo](https://kf-node-auth.herokuapp.com/)
+
 # node-fullstack-dev-template
 # Do you need a simple and fast node js development environment with hot reload and already setup authenticatiion using jsonwebtoken? I gotch you!
 
@@ -10,3 +12,6 @@
 # 7. npm run test to run test
 # 8. npm  run dev to start server
 # Done!
+
+
+
