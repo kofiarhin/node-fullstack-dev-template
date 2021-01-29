@@ -8,7 +8,6 @@ const auth = async (req, res, next) =>  {
    // const token = req.header('token')
    if(process.env.environment === "dev") {
          token = req.cookies.token;
-         console.log("dev")
    }
 
    else if(process.env.environment === "test") {

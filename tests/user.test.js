@@ -39,11 +39,21 @@ test("get home page", async() => {
 })
 
 
-//logout user
 test("logout user", async() => {
 
-    await request(app).get("/users/logout")
-    .set("token", userOneToken)
-    .send().expect(302) 
+            // login user first
+            const response = await request(app).post("/users/login").send({
+                email: userOne.email,
+                password: userOne.password
+            }).expect(200)
+
+           const token = response.body.token;
+
+        
+
+        // logout user
+       const res =  await request(app).get("/users/logout").set("token", token).send().expect(302)
+
 })
+
 

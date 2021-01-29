@@ -3,7 +3,8 @@ const router = Router();
 const User = require("../model/user")
 const auth  = require("../middleware/auth")
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { ConnectionStates } = require('mongoose');
 
 async function clearDatabase() {
 
@@ -60,27 +61,37 @@ router.post("/login", async(req, res) => {
 })
 
 
-router.get("/logout", async (req, res) => {
+router.get("/logout", auth,  async (req, res) => {
 
-    const token = req.cookies.token;
+    const { tokens } = req.user;
+
+
+    req.user.tokens =  tokens.filter ( token => token.token !== req.token)
     
-    const payload =  jwt.verify(token, process.env.jwt_secret);
-    
-    const {_id} = payload;
-    
-    const user = await User.findById(_id);
-
-    if(user) {
-
-        const { tokens }  = user;
-
-        user.tokens =  tokens.filter ( token  => token !== token);
-        await user.save();
-    }
-
+    res.cookie("token", "");
+    await req.user.save();
     res.redirect("/login")
+    res.send()
 
-    res.send();
+    // const token = req.cookies.token;
+    
+    // const payload =  jwt.verify(token, process.env.jwt_secret);
+    
+    // const {_id} = payload;
+    
+    // const user = await User.findById(_id);
+
+    // if(user) {
+
+    //     const { tokens }  = user;
+
+    //     user.tokens =  tokens.filter ( token  => token !== token);
+    //     await user.save();
+    // }
+
+    // res.redirect("/login")
+
+    // res.send();
 })
 
 
