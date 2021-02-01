@@ -5,8 +5,8 @@
 
 # 1. clone repo
 # 2. create a config folder in root folder
-# 3. in the folder create your test.env and dev.env file
-# 4. set the environment variables  ---- jwt_secret, mongo_url and environment
+# 3. in the folder of config your test.env and dev.env file
+# 4. set the environment variables  ---- jwt_secret, mongo_url and environment`
 # 5. npm install
 # 6. start mongodb server
 # 7. npm run test to run test
