@@ -84,3 +84,19 @@ test("get user profile", async() => {
 })
 
 
+// update user details
+test("update user details", async() => {
+
+    const response =  await request(app).patch("/users")
+    .set("token", userOneToken)
+    .send({
+        firstname: "new name", 
+        password: "new password"
+    }).expect(200)
+
+    expect(response.body).toHaveProperty("user")
+
+    console.log(response.body)
+})
+
+

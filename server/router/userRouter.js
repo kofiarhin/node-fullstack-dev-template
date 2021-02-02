@@ -104,10 +104,23 @@ router.get("/logout", auth,  async (req, res) => {
 })
 
 
-
 // get user pfofile
 router.get("/me", auth,  async(req, res) => {
     res.send({ user: req.user})
 })
+
+// update user details
+router.patch("/", auth,  async(req, res) => {
+
+    const fields = Object.keys(req.body)
+
+    fields.forEach ( field => {
+
+                req.user[field] = req.body[field];
+    });
+
+     await req.user.save();
+    res.send({ user: req.user})
+} )
 
 module.exports = router;
