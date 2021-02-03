@@ -123,4 +123,15 @@ router.patch("/", auth,  async(req, res) => {
     res.send({ user: req.user})
 } )
 
+
+// delete user from database
+router.delete("/", auth, async(req, res) => {
+
+
+    const  { _id} = req.user;
+   
+    await req.user.remove();
+    res.send();
+})
+
 module.exports = router;

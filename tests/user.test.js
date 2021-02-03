@@ -96,7 +96,19 @@ test("update user details", async() => {
 
     expect(response.body).toHaveProperty("user")
 
-    console.log(response.body)
+})
+
+// delete user from database
+test("remove user", async() => {
+
+    await request(app).delete("/users")
+    .set("token", userOneToken)
+    .send()
+    .expect(200)
+
+    const user = await User.findById(userOne._id); 
+
+    expect(user).toBe(null)
 })
 
 
