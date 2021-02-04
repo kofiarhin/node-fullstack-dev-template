@@ -8,10 +8,18 @@ function SidenavController() {
 
       const menu = document.querySelector(".menu")
       const sidenav = document.querySelector(".sidenav")
+      const close = document.querySelector(".close")
+
+
 
       menu.addEventListener("click", () => {
 
         sidenav.classList.toggle("active")
+      })
+
+      close.addEventListener("click", function() {
+
+          sidenav.classList.remove("active")
       })
 }
 

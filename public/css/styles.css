@@ -208,6 +208,26 @@ footer .container {
   font-size: 1.4rem;
 }
 
+
+.sidenav .close {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  transition: all ease-in-out 300ms;
+  
+}
+
+.sidenav .close:hover {
+
+  transform: scale(1.2)
+}
+
+
+
+
 /* media queries */
 @media(max-width: 650px) {
   .main-header  nav {
@@ -229,5 +249,6 @@ footer .container {
 
     transform: translateX(0%)
   }
+  
   
 }
