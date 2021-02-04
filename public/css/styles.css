@@ -38,11 +38,6 @@ h1, h2, h3, h4, h5, p {
   text-transform: capitalize
 }
 
-.slug {
-  text-align: center;
-  font-weight: 900;
-  font-size: 1.2rem;
-}
 
 .error {
   color: red;
@@ -144,12 +139,6 @@ footer .container {
   align-items: center;
 }
 
-#landing .content {
-  width: 500px;
-  max-width: 90%;
-  margin: 0 auto;
-  color: white; 
-}
 
 
 
@@ -159,11 +148,37 @@ footer .container {
   color: white;
 }
 
-
-#laming .content a {
-  font-size: 2rem;
+#landing .content {
+  width: 500px;
+  max-width: 90%;
+  margin: 0 auto;
   color: white;
+  text-align: center;
+  z-index: 100000
 }
+
+#landing .slug {
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+#landing  .content a {
+  font-size: 1.2rem;
+  color: white;
+  display: inline-block;
+  background: transparent; 
+  padding: 0.8rem 3rem;
+  border: 1px solid white;
+  transition: all ease-in-out 300ms;
+}
+#landing .content a:hover {
+  background: white;
+  color: black;
+}
+
+
 
 
 /* media queries */
