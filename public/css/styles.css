@@ -120,6 +120,15 @@ footer .container {
   object-fit: cover;
 }
 
+
+#landing .main-header {
+  position: absolute;
+  top: 0;
+  width: 100vw; 
+  z-index: 8000;
+}
+
+
 #landing .overlay {
   position: absolute;
   top: 0;
@@ -127,8 +136,9 @@ footer .container {
   bottom:0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #landing .content {
@@ -138,12 +148,7 @@ footer .container {
   color: white; 
 }
 
-#landing .main-header {
-  position: absolute;
-  top: 0;
-  width: 100vw; 
-  z-index: 8000;
-}
+
 
 #landing .main-header nav a,
 #landing .main-header h1
@@ -166,4 +171,11 @@ footer .container {
   .main-header .menu {
     display: block;
   }
+
+  #landing .main-header .menu {
+    display: block;
+    color: white;
+  }
+
+  
 }
