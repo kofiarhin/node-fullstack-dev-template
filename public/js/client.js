@@ -1,14 +1,23 @@
 const path = location.pathname;
 
-const userOne = {
-  firstname: "kofi",
-  lastname: "arhin",
-  email: "kofiarhin@gmail.com",
-  password: "password"
+
+SidenavController()
+
+// sidenav controller
+function SidenavController() {
+
+      const menu = document.querySelector(".menu")
+      const sidenav = document.querySelector(".sidenav")
+
+      menu.addEventListener("click", () => {
+
+        sidenav.classList.toggle("active")
+      })
 }
 
-console.log(userOne)
 
+
+// main controller
 switch(path) {
 
   case "/register":
