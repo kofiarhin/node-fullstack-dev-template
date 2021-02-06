@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "env-cmd -f ./config/test.env jest --watchAll --runInBand",
-    "dev": "env-cmd -f ./config/dev.env nodemon server/server.js -e js,hbs --ignore public",
-    "start": "node server/server.js"
+    "dev": "npm run open && env-cmd -f ./config/dev.env nodemon server/server.js -e js,hbs --ignore public",
+    "start": "node server/server.js",
+    "open": "start http://localhost:3000"
   },
   "jest": {
     "testEnvironment": "node"
