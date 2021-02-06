@@ -52,9 +52,13 @@ if(token) {
 
   const user = await User.findById(payload._id);
 
-  console.log(user)
+ if(user) {
+   res.locals.user  = user;
+ }
 
+} else {
 
+  console.log("you are not logged in")
 }
 
   next()
