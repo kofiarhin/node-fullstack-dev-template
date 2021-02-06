@@ -11,6 +11,7 @@ require("./db/mongoose")
 const auth = require('./middleware/auth')
 const { handleErrors } = require("./lib/helper")
 const userRouter = require("./router/userRouter")
+const jwt = require("jsonwebtoken")
 
 
 // // setup middlewares
@@ -41,6 +42,25 @@ liveReloadServer.server.once("connection", () => {
 app.use(connectLive());
 
 } 
+
+const checkUser =  async function(req, res, next) {
+
+ const token = req.cookies.token;
+
+if(token) {
+  const payload = jwt.verify(token, process.env.jwt_secret);
+
+  const user = await User.findById(payload._id);
+
+  console.log(user)
+
+
+}
+
+  next()
+}
+app.get("*", checkUser)
+
 
 // routes
 app.get("/", async(req, res) => {
