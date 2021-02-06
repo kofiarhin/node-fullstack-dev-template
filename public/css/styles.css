@@ -35,7 +35,8 @@ h1, h2, h3, h4, h5, p {
 .title {
   text-align: center;
   margin-bottom: 1rem;
-  text-transform: capitalize
+  text-transform: capitalize;
+  font-size: 3rem;
 }
 
 
@@ -44,10 +45,13 @@ h1, h2, h3, h4, h5, p {
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }
+
+
 /* main header */
 .main-header {
   padding: 2rem 0rem;
 }
+
 .main-header .container {
   display:  flex;
   align-items: center;
@@ -57,6 +61,7 @@ h1, h2, h3, h4, h5, p {
 .main-header .container h1 {
   text-transform: uppercase;
 }
+
 .main-header .container nav a {
   margin-left: 1rem;
 }
@@ -110,13 +115,10 @@ footer .container {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    background-image: url("../img/code.jpg");
+    background-size: cover;
 }
 
-#landing video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 
 #landing .main-header {
@@ -133,7 +135,7 @@ footer .container {
   right: 0;
   bottom:0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -154,7 +156,6 @@ footer .container {
   margin: 0 auto;
   color: white;
   text-align: center;
-  z-index: 100000
 }
 
 #landing .slug {
@@ -173,6 +174,7 @@ footer .container {
   border: 1px solid white;
   transition: all ease-in-out 300ms;
 }
+
 #landing .content a:hover {
   background: white;
   color: black;
