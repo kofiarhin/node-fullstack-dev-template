@@ -1,86 +1,84 @@
-const mongoose = require("mongoose")
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { isEmail } = require("validator");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     firstname: {
-        type: String,
-        required: [true, "firstname is required"]
+      type: String,
+      required: [true, "firstname is required"],
     },
     lastname: {
-        type: String,
-        required: [true, "lastname is required"]
+      type: String,
+      required: [true, "lastname is required"],
     },
     email: {
-        type: String,
-        required: [true, "email is required"],
-        unique: [true, "email is already taken"],
-        trim: true,
+      type: String,
+      required: [true, "email is required"],
+      unique: [true, "email is already taken"],
+      trim: true,
+      validate: [isEmail, "please provid a valid email address"],
     },
 
     password: {
-        type: String,
-        required: [true, "password is required"],
-        trim: true
+      type: String,
+      required: [true, "password is required"],
+      trim: true,
     },
     tokens: [
-        {
-            token: {
-                type: String
-            }
-        }
+      {
+        token: {
+          type: String,
+        },
+      },
     ],
     avatar: {
-        type: Buffer
-    }
-},{
-    timestamps: true
+      type: Buffer,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  if (user.isModified("password")) {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
+  }
+
+  next();
 });
 
-
-userSchema.pre("save", async function(next) {
-
-     const user = this;
-
-     if(user.isModified("password")) {
-     const salt = await bcrypt.genSalt(10);
-     const hash = await bcrypt.hash(user.password, salt);
-     user.password = hash;
-     }
-    
-    next()
-})
-
-
-
 // login user
-userSchema.statics.login = async function(email, password) {
-    
-    const  user = await User.findOne({ email})
+userSchema.statics.login = async function (email, password) {
+  const user = await User.findOne({ email });
 
+  if (user) {
+    // compare passwords
 
-    if(user) {
-        // compare passwords
+    const isMatch = await bcrypt.compare(password, user.password);
 
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if(isMatch) {
-            return user;
-        }
+    if (isMatch) {
+      return user;
     }
-}
+  }
+};
 
 // generate token
-userSchema.methods.generateToken =  async function() {
+userSchema.methods.generateToken = async function () {
+  const user = this;
+  const token = jwt.sign({ _id: user._id }, process.env.jwt_secret);
 
-        const user = this;
-        const token = jwt.sign({_id: user._id}, process.env.jwt_secret)
-        
-        user.tokens = user.tokens.concat({token});
+  user.tokens = user.tokens.concat({ token });
 
-        await user.save();
-        return token;
-}
+  await user.save();
+  return token;
+};
 
 const User = mongoose.model("User", userSchema);
 
